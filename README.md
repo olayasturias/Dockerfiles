@@ -10,7 +10,7 @@ In this readme, you can find some basic instructions for building and using thes
 
 ## To build from directory
 
-Download the dockerfile ** to a directory different from the HOME directory**, and from that directory, run the following comand: 
+Download the dockerfile **to a directory different from the HOME directory**, and from that directory, run the following comand: 
 
 ```bash
 docker build -t nvidia_noetic .
@@ -46,3 +46,23 @@ docker run -it --net=host --gpus all \
 ```bash
 docker images
 ```
+
+You will get a table that will look something like this:
+
+```bash
+REPOSITORY      TAG                               IMAGE ID       CREATED         SIZE
+nvidia_ros2     latest                            fae49078b71c   5 minutes ago   12.7GB
+nvidia_noetic   latest                            8b16c6051201   3 days ago      12.3GB
+nvidia/cudagl   11.1.1-base-ubuntu20.04           16617ddb8965   2 months ago    475MB
+nvidia/cuda     11.4.2-cudnn8-devel-ubuntu20.04   b1539d83387e   2 months ago    9.14GB
+```
+
+# Remove docker images
+
+You can remove one or several docker images at once by running:
+
+```bash
+docker rmi <image-id> <image-id> ...
+```
+
+
