@@ -1,0 +1,35 @@
+FROM nvidia/cuda:11.5.0-cudnn8-runtime-ubuntu18.04 docker pull 
+
+# Minimal setup
+RUN apt update 
+RUN apt install -y locales lsb-release
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN dpkg-reconfigure locales
+
+# Install ROS Melodic
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+RUN apt install curl
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ros-melodic-desktop-full
+RUN apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
+RUN apt install python-rosdep
+RUN rosdep init \
+ && rosdep update
+RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+
+# Install Git
+RUN apt-get update && apt-get install -y git
+
+# Create a Catkin workspace 
+RUN apt-get install python-catkin-tools python-osrf-pycommon
+# Change the default shell to Bash
+SHELL [ "/bin/bash" , "-c" ]
+
+RUN source /opt/ros/melodic/setup.bash \
+ && mkdir -p /catkin_ws/src \
+ && cd /catkin_ws/src \
+ && catkin_init_workspace  \
+ && cd .. \
+ && catkin build
