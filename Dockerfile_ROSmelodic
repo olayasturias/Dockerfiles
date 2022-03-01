@@ -9,12 +9,12 @@ RUN dpkg-reconfigure locales
 
 # Install ROS Melodic
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-RUN apt install curl
-RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+RUN apt install -y curl
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
 RUN apt-get update \
- && apt-get install -y --no-install-recommends ros-melodic-desktop-full
-RUN apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
-RUN apt install python-rosdep
+ && apt-get install -y --no-install-recommends ros-melodic-desktop-full 
+RUN apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
+RUN apt install -y python-rosdep
 RUN rosdep init \
  && rosdep update
 RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
