@@ -90,7 +90,7 @@ RUN echo "Installing OpenCV last version ..." && \
     #-? Another RUN command in order to free memory
 RUN echo "Getting ORB-SLAM 3 installation ready ..." && \
     cd /dpds/ && \
-    git clone https://github.com/UZ-SLAMLab/ORB_SLAM3.git ORB_SLAM3 && \    
+    git clone https://github.com/UZ-SLAMLab/ORB_SLAM3.git ORB_SLAM3 && \  
     #-! From here, a compilation method is proposed by the repo: "chmod +x build.sh && ./build.sh"
     #-! Such method remove some control over the image build (simultaneous jobs number, directories, OpenCV version etc.) 
     #-! Thus evey step in build.sh has been added here
@@ -123,6 +123,7 @@ RUN echo "Getting ORB-SLAM 3 installation ready ..." && \
     cmake -D CMAKE_BUILD_TYPE=Release \
     /dpds/ORB_SLAM3/Thirdparty/Sophus/ && \
     make -j4 && \
+    make install && \
     #-> Uncompress vocabulary
     #-? ORB-SLAM 3 useful data
     echo "Uncompressing vocabulary ..." && \
@@ -140,8 +141,13 @@ RUN echo "Configuring and building ORB_SLAM3 ..." && \
     -D CMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/ \
     /dpds/ORB_SLAM3 && \
     make -j4
-RUN echo "Configuring and building ORB_SLAM3 for ROS ..." && \
-    export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:/dpds/ORB_SLAM3/Examples/ROS && \
-    cd /dpds/ORB_SLAM3 && \
-    chmod +x ./build_ros.sh && \
-    ./build_ros.sh
+
+RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+
+# RUN echo "Configuring and building ORB_SLAM3 for ROS ..." && \
+#     echo export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:/dpds/ORB_SLAM3/Examples_old/ROS >> ~/.bashrc && \
+#     cd /dpds/ORB_SLAM3/Examples_old/ROS/ORB_SLAM3 && \
+#     mkdir build && \
+#     cd build && \
+#     cmake .. -DROS_BUILD_TYPE=Release && \
+#     make -j
